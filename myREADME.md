@@ -1,2 +1,2 @@
 use to update jupyterlab:
-    conda update -c conda-forge jupyterlab
+conda update -c conda-forge jupyterlab

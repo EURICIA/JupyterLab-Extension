@@ -20,7 +20,8 @@ interface APODResponse {
  */
 const plugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab-apod',
-  description: 'Show a random NASA Astronomy Picture of the Day in a JupyterLab panel.',
+  description:
+    'Show a random NASA Astronomy Picture of the Day in a JupyterLab panel.',
   autoStart: true,
   requires: [ICommandPalette],
   activate: async (app: JupyterFrontEnd, palette: ICommandPalette) => {
@@ -37,20 +38,24 @@ const plugin: JupyterFrontEndPlugin<void> = {
       widget.title.closable = true;
 
       // Add an image element to the content
-      let img = document.createElement('img');
+      const img = document.createElement('img');
       content.node.appendChild(img);
 
       // Get a random date string in YYYY-MM-DD format
       function randomDate() {
         const start = new Date(2010, 1, 1);
         const end = new Date();
-        const randomDate = new Date(start.getTime() + Math.random()*(end.getTime() - start.getTime()));
+        const randomDate = new Date(
+          start.getTime() + Math.random() * (end.getTime() - start.getTime())
+        );
         return randomDate.toISOString().slice(0, 10);
       }
 
       // Fetch info about a random picture
-      const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${randomDate()}`);
-      const data = await response.json() as APODResponse;
+      const response = await fetch(
+        `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${randomDate()}`
+      );
+      const data = (await response.json()) as APODResponse;
 
       if (data.media_type === 'image') {
         // Populate the image
@@ -60,9 +65,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
         console.log('Random APOD was not a picture.');
       }
 
-
       return widget;
-    }
+    };
     let widget = await newWidget();
 
     // Add an application command
