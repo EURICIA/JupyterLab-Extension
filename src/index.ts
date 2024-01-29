@@ -19,13 +19,13 @@ interface APODResponse {
   media_type: 'video' | 'image';
   title: string;
   url: string;
-};
+}
 
 // refactoring the widget code into the new APODWidget class
 class APODWidget extends Widget {
   /**
-  * Construct a new APOD widget.
-  */
+   * Construct a new APOD widget.
+   */
   constructor() {
     super();
 
@@ -41,21 +41,22 @@ class APODWidget extends Widget {
   }
 
   /**
-  * The image element associated with the widget.
-  */
+   * The image element associated with the widget.
+   */
   readonly img: HTMLImageElement;
 
   /**
-  * The summary text element associated with the widget.
-  */
+   * The summary text element associated with the widget.
+   */
   readonly summary: HTMLParagraphElement;
 
   /**
-  * Handle update requests for the widget.
-  */
+   * Handle update requests for the widget.
+   */
   async updateAPODImage(): Promise<void> {
-
-    const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${this.randomDate()}`);
+    const response = await fetch(
+      `https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${this.randomDate()}`
+    );
 
     if (!response.ok) {
       const data = await response.json();
@@ -67,7 +68,7 @@ class APODWidget extends Widget {
       return;
     }
 
-    const data = await response.json() as APODResponse;
+    const data = (await response.json()) as APODResponse;
 
     if (data.media_type === 'image') {
       // Populate the image
@@ -83,20 +84,26 @@ class APODWidget extends Widget {
   }
 
   /**
-  * Get a random date string in YYYY-MM-DD format.
-  */
+   * Get a random date string in YYYY-MM-DD format.
+   */
   randomDate(): string {
     const start = new Date(2010, 1, 1);
     const end = new Date();
-    const randomDate = new Date(start.getTime() + Math.random()*(end.getTime() - start.getTime()));
+    const randomDate = new Date(
+      start.getTime() + Math.random() * (end.getTime() - start.getTime())
+    );
     return randomDate.toISOString().slice(0, 10);
   }
 }
 
 /**
-* Activate the APOD widget extension.
-*/
-function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILayoutRestorer | null) {
+ * Activate the APOD widget extension.
+ */
+function activate(
+  app: JupyterFrontEnd,
+  palette: ICommandPalette,
+  restorer: ILayoutRestorer | null
+) {
   console.log('JupyterLab extension jupyterlab_apod is activated!');
 
   // declare a widget variable
@@ -110,7 +117,7 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
       // Regenerate the widget if disposed
       if (!widget || widget.isDisposed) {
         const content = new APODWidget();
-        widget = new MainAreaWidget({content});
+        widget = new MainAreaWidget({ content });
         widget.id = 'apod-jupyterlab';
         widget.title.label = 'Astronomy Picture';
         widget.title.closable = true;
@@ -128,10 +135,10 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
     }
   });
   // add command to palette
-  palette.addItem({command, category: 'Tutorial'});
+  palette.addItem({ command, category: 'Tutorial' });
 
   // track and restore the widget state
-  let tracker = new WidgetTracker<MainAreaWidget<APODWidget>>({
+  const tracker = new WidgetTracker<MainAreaWidget<APODWidget>>({
     namespace: 'apod'
   });
 
@@ -140,7 +147,6 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
       command,
       name: () => 'apod'
     });
-
   }
 }
 /**
@@ -152,17 +158,17 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, restorer: ILay
 //     'Show a random NASA Astronomy Picture of the Day in a JupyterLab panel.',
 //   autoStart: true,
 //   requires: [ICommandPalette],
-  
+
 // };
 
 const plugin: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab-apod',
-  description: 'Show a random NASA Astronomy Picture of the Day in a JupyterLab panel.',
+  description:
+    'Show a random NASA Astronomy Picture of the Day in a JupyterLab panel.',
   autoStart: true,
   requires: [ICommandPalette],
   optional: [ILayoutRestorer],
   activate: activate
 };
-
 
 export default plugin;

@@ -4,10 +4,8 @@
     https://jupyterlab.readthedocs.io/en/stable/developer/css.html
 */
 .my-apodWidget {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: auto;
-  }
-  
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
