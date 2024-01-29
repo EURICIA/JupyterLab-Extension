@@ -12,7 +12,7 @@ import {
 
 import { Widget } from '@lumino/widgets';
 
-interface APODResponse {
+interface IAPODResponse {
   copyright: string;
   date: string;
   explanation: string;
@@ -68,7 +68,7 @@ class APODWidget extends Widget {
       return;
     }
 
-    const data = (await response.json()) as APODResponse;
+    const data = (await response.json()) as IAPODResponse;
 
     if (data.media_type === 'image') {
       // Populate the image
